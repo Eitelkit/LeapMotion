@@ -1,0 +1,55 @@
+<!--Leap.loop方法对来自设备的数据进行捕捉。-->
+<html>
+<head>
+
+<script src="http://js.leapmotion.com/leap-0.4.2.js"></script>
+<style type="text/css">
+#position {
+  width: 50px;
+  height: 25px;
+  position: absolute;
+  background-color: black;
+}
+</style>
+</head>
+<body>
+  <div id="position"></div>
+</body>
+<script type="text/javascript">
+//Leap.loop方法对来自设备的数据进行捕捉。
+Leap.loop(function(frame) {
+  if (frame.pointables.length > 0)
+  console.log(frame.pointables);
+});
+//获取单个指向物的原始坐标：tipPosition指尖位置
+Leap.loop(function(frame)
+{   if (frame.pointables.length > 0)
+  {     var position = frame.pointables[0].tipPosition;
+    console.log("X: " + position[0] + " Y: " + position[1]+" Z: "+position[2]);
+  }
+});
+
+Leap.loop(function(frame) {
+  if (frame.pointables.length > 0) {
+    var position = frame.pointables[0].stabilizedTipPosition;
+    var normalized = frame.interactionBox.normalizePoint(position);
+    var x = window.innerWidth * normalized[0];
+    var y = window.innerHeight * (1 - normalized[1]);
+    console.log("X: " + x + " Y: " + y);
+  }
+});
+
+Leap.loop(function(frame) {
+  if (frame.pointables.length > 0) {
+    var position = frame.pointables[0].stabilizedTipPosition;
+    var normalized = frame.interactionBox.normalizePoint(position);
+    var element = document.getElementById("position");
+    element.style.left = window.innerWidth * normalized[0];
+    element.style.top = window.innerHeight * (1 - normalized[1]);
+  }
+});
+
+
+</script>
+
+</html>
